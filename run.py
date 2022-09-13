@@ -25,6 +25,11 @@ balance_sheet = SHEET.worksheet("balance-sheet")
 insights = SHEET.worksheet("insights")
 
 def splash_screen():
+    """
+    splash_screen() function takes no arguments and prints welcome message and service name for user.
+    'Welcome!' is printed to screen and held for 1 second.
+    'Finacne Health Manager' is printed and held for 2 seconds.
+    """
     print("""
  __          __  _                          _ 
  \ \        / / | |                        | |
@@ -49,6 +54,51 @@ def splash_screen():
                                                                                                  """)
     sleep(2)
 
+def welcome_screen():
+
+    """
+    welcome_screen function represents the first page the user can interact with.
+    It is the home pg and features three options:
+    1) New User, 2) Returning User, 3) Quit 
+    The input is formatted with lower() and is kept in the string format.
+    The input is stored in a variable 'choice' and is validated
+    Valid input required to proceed
+    """
+
+    print("""
+
+    Please select 1 or 2. Or type “q” to quit.
+        1)	New User – if you would like to register a new user, and complete finance assessment
+        2)	Returning User – if you would like to view, update or delete an existing profile
+        3)	Quit – to end program
+
+        """)
+    is_valid = False
+
+    while (is_valid == False):
+        try:
+            choice = input("Please select 1 or 2. Or type “q” to quit.")
+            if ((choice != "1")|(choice != "2")|(choice != "q")):
+                raise ValueError
+            is_valid = True
+            return choice
+
+        except ValueError:
+            print("please enter a valid input form the options given.")
+
+
+def launch_interface(user_choice):
+    """
+    launch_interface(inpt:str) it accepts user choice from earlier in sequence.
+    It launches corrisponding function for each user experience type 'new' or 'returning'
+    output of function is 
+    """
+    if user_choice == "1":
+        new_user_protocol()
+    else:
+        return_user_protocol()
+
+
 def main ():
     splash_screen()
     user_choice = welcome_screen()
@@ -60,5 +110,3 @@ def main ():
     else:
         launch_interface(user_choice)
 
-
-splash_screen()
