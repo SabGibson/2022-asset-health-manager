@@ -56,22 +56,144 @@ def splash_screen():
     sleep(2)
 
 def create_usrname():
+    """
+    create_usrname() -> string 
+    part of new_user_protocol function used to accept user input as name, and validate name is unique in sheet
+    username is to be used as unique ID and forign key to qurey data as a dict
+
+    """
     valid_uname = False
     all_usrs = users.col_values(1)
     while (valid_uname is False):
         try:
             entrd_ursname = input("Please enter username")
             if entrd_ursname in all_usrs:
-                raise UsernameError
+                raise ValueError
             
             valid_uname = True
             return entrd_ursname
-        except UsernameError:
+        except ValueError:
             print("Username taken.")       
 
         
 def calc_salary():
-    pass
+
+    """
+    step 1) Get salary in monthly and weekly terms
+    step 2) Calculate pension contribution
+    step 3) Calculate taxable income
+    step 4) calculate tax rate
+    step 5) Calculate NI contributions
+    step 6) Calculate student loan repayments 
+    step 7) Calculate take home pay 
+    """
+    
+    valid_sal = False
+    valid_pension = False
+    tax_free_allowence = 0
+    student_loan_inpt_valid = False
+
+    ## step 1 
+
+    ## validate user input
+
+    while (valid_sal is False):
+        try:
+            salary_pre_tax = input("Please input pre-tax salary per annum")
+            if salary_pre_tax.isnumeric:
+                salary_pre_tax = float(salary_pre_tax)
+                valid_sal = True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid salary as a number")       
+    
+    pay_pm = salary_pre_tax/12
+
+    ## step 2
+    
+    ## validate user input
+
+    while (valid_pension is False):
+        try:
+            pension = input("Enter pension contribution percentage")
+            if pension.isnumeric:
+                pension = int(salary_pre_tax)
+                valid_pension = True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid pension as a number")       
+    
+    pension_deduction_pa = salary_pre_tax * (pension*0.01)
+
+    
+    ## step 3 
+
+    if salary_pre_tax > 125000 :
+        tax_free_allowence = 0
+    else:
+        tax_free_allowence = 125700    
+
+    taxable_income = salary_pre_tax - tax_free_allowence
+
+    ## step 4 calculate tax 
+
+    if salary_pre_tax < 37701:
+        tax_rate = 0.2
+    elif salary_pre_tax < 150001:
+        tax_rate = 0.4
+    else:
+        tax_rate = 0.45
+    
+    ## step 5
+
+    if (pay_pm > 792 )and (pay_pm <= 4167 ):
+        ni_contributions = 0.12*(pay_pm)
+    elif pay_pm > 4167:
+        ni_contributions = 0.12*4167 + 0.02*(pay_pm-4167)  
+
+    else:
+        ni_contributions = 0  
+
+    ## step 6 
+
+    ## validate user input
+    
+    while student_loan_inpt_valid is False:
+        try:
+            print("""
+
+            Please select 1 or 2. Or 0.
+                0)	No student loan
+                1)	Student loan type 1
+                2)	Student loan type 2
+
+            """)
+            student_loan_inpt = input("please enter 0,1 or 2")
+            allowed_inputs = "123"
+            if (student_loan_inpt not in allowed_inputs):
+                raise ValueError
+            student_loan_inpt_valid = True
+
+        except ValueError:
+            print("Please enter a valid option")
+
+    if student_loan_inpt == "1":
+        student_loan = 0.09*(pay_pm-1615)
+    elif student_loan_inpt == "2":
+        student_loan = 0.09*(pay_pm-2214) 
+    else:
+        student_loan = 0 
+
+    total_deductions = student_loan + ni_contributions + (tax_rate*taxable_income)/12 + pension_deduction_pa
+    take_home_pay = pay_pm - total_deductions
+
+    print(take_home_pay) 
+
+
 
 def calc_balance_sheet():
     pass
@@ -85,13 +207,14 @@ def new_user_protocol():
     new_user_protocol function hosts functions used to register new users
     """
 
-    create_usrname()
+    account_user_name = create_usrname()
 
     calc_salary()
 
     balance_sheet = calc_balance_sheet()
 
-    get_insights()
+    get_insights(balance_sheet)
+
 
 
 
@@ -156,3 +279,4 @@ def main ():
     else:
         launch_interface(user_choice)
 
+calc_salary()
