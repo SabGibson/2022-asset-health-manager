@@ -24,6 +24,7 @@ salary = SHEET.worksheet("salary")
 balance_sheet = SHEET.worksheet("balance-sheet")
 insights = SHEET.worksheet("insights")
 
+
 def splash_screen():
     """
     splash_screen() function takes no arguments and prints welcome message and service name for user.
@@ -54,6 +55,50 @@ def splash_screen():
                                                                                                  """)
     sleep(2)
 
+def create_usrname():
+    valid_uname = False
+    all_usrs = users.col_values(1)
+    while (valid_uname is False):
+        try:
+            entrd_ursname = input("Please enter username")
+            if entrd_ursname in all_usrs:
+                raise UsernameError
+            
+            valid_uname = True
+            return entrd_ursname
+        except UsernameError:
+            print("Username taken.")       
+
+        
+def calc_salary():
+    pass
+
+def calc_balance_sheet():
+    pass
+
+def get_insights():
+    pass
+
+
+def new_user_protocol():
+    """
+    new_user_protocol function hosts functions used to register new users
+    """
+
+    create_usrname()
+
+    calc_salary()
+
+    balance_sheet = calc_balance_sheet()
+
+    get_insights()
+
+
+
+def return_user_protocol():
+    pass
+
+
 def welcome_screen():
 
     """
@@ -73,9 +118,10 @@ def welcome_screen():
         3)	Quit – to end program
 
         """)
+
     is_valid = False
 
-    while (is_valid == False):
+    while (is_valid is False):
         try:
             choice = input("Please select 1 or 2. Or type “q” to quit.")
             if ((choice != "1")|(choice != "2")|(choice != "q")):
