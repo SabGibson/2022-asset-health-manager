@@ -29,3 +29,9 @@ The deployment terminal is set to 80 columns by 24 rows. That means that each li
 
 -----
 Happy coding!
+
+---
+
+Ascii Art (http://patorjk.com/software/taag/)
+
+https://www.wikijob.co.uk/finance/pay-salary/calculate-take-home-salary#how-to-calculate-your-take-home-sal

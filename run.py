@@ -4,6 +4,7 @@ Import external libraries for working with google drive adn sheets API.
 """
 from pprint import pprint
 import sys
+from tkinter.tix import InputOnly
 import gspread
 from google.oauth2.service_account import Credentials
 from time import sleep
@@ -79,6 +80,7 @@ def create_usrname():
 def calc_salary():
 
     """
+    calc_salary() -> float 
     step 1) Get salary in monthly and weekly terms
     step 2) Calculate pension contribution
     step 3) Calculate taxable income
@@ -196,10 +198,102 @@ def calc_salary():
 
 
 def calc_balance_sheet():
-    pass
+    """
+    Balance sheet asks the user questions about monthyly expenses.
+    There are 5 fields in total in this section to fill
+    it dosent observe the salaray on a granular level and instead is fluid
+     
+     """
 
-def get_insights():
-    pass
+    valid_rent = False
+    valid_util = False
+    valid_ent = False
+    valid_shop = False
+    valid_misc = False
+    
+    print("Please enter your rent contributions: ")
+    while (valid_rent is False):
+        try:
+            usr_rent = input("Enter Value")
+            if usr_rent.isnumeric:
+                usr_rent = int(usr_rent)
+                valid_rent = True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid number")
+
+    print("Please enter your utility bill contributions: ")
+    while (valid_util is False):
+        try:
+            usr_utility = input("Enter Value")
+            if usr_utility.isnumeric:
+                usr_utility = int(usr_utility)
+                valid_util= True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid number")
+    
+    print("Please enter your entertainment spend: ")
+    while (valid_ent is False):
+        try:
+            usr_ent = input("Enter Value")
+            if usr_ent.isnumeric:
+                usr_ent = int(usr_ent)
+                valid_ent = True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid number")
+
+    print("Please enter your grocery spend: ")
+    while (valid_shop is False):
+        try:
+            usr_shop= input("Enter Value")
+            if usr_shop.isnumeric:
+                usr_shop = int(usr_shop)
+                valid_shop = True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid number")
+
+    print("Please enter your miscillaneous spend: ")
+    while (valid_misc is False):
+        try:
+            usr_misc = input("Enter Value")
+            if usr_misc.isnumeric:
+                usr_misc = int(usr_misc)
+                valid_misc = True
+            else:
+                raise ValueError
+
+        except ValueError:
+            print("Please enter a valid number")
+
+
+    usr_bills = [usr_rent,usr_utility,usr_ent,usr_shop,usr_misc]
+
+    #balance_sheet.append_row(usr_bills)
+
+    print(usr_bills)
+
+    return usr_bills
+
+
+
+
+
+def get_insights(account:list):
+    """
+    DOCSRTING
+    """
+    
 
 
 def new_user_protocol():
@@ -279,4 +373,5 @@ def main ():
     else:
         launch_interface(user_choice)
 
-calc_salary()
+
+calc_balance_sheet()
