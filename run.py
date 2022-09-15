@@ -8,6 +8,7 @@ from tkinter.tix import InputOnly
 import gspread
 from google.oauth2.service_account import Credentials
 from time import sleep
+from art import *
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -29,31 +30,9 @@ insights = SHEET.worksheet("insights")
 def splash_screen():
     """
     splash_screen() function takes no arguments and prints welcome message and service name for user.
-    'Welcome!' is printed to screen and held for 1 second.
     'Finacne Health Manager' is printed and held for 2 seconds.
     """
-    print("""
- __          __  _                          _ 
- \ \        / / | |                        | |
-  \ \  /\  / /__| | ___ ___  _ __ ___   ___| |
-   \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ |
-    \  /\  /  __/ | (_| (_) | | | | | |  __/_|
-     \/  \/ \___|_|\___\___/|_| |_| |_|\___(_)
-                                              
-                                              """)
-
-    sleep(2)
-    print("""
-
-  ______ _                              _    _            _ _   _       __  __                                   
- |  ____(_)                            | |  | |          | | | | |     |  \/  |                                  
- | |__   _ _ __   __ _ _ __   ___ ___  | |__| | ___  __ _| | |_| |__   | \  / | __ _ _ __   __ _  __ _  ___ _ __ 
- |  __| | | '_ \ / _` | '_ \ / __/ _ \ |  __  |/ _ \/ _` | | __| '_ \  | |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|
- | |    | | | | | (_| | | | | (_|  __/ | |  | |  __/ (_| | | |_| | | | | |  | | (_| | | | | (_| | (_| |  __/ |   
- |_|    |_|_| |_|\__,_|_| |_|\___\___| |_|  |_|\___|\__,_|_|\__|_| |_| |_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|   
-                                                                                                  __/ |          
-                                                                                                 |___/           
-                                                                                                 """)
+    tprint("Finance Health Manager")
     sleep(2)
 
 def create_usrname():
@@ -112,6 +91,7 @@ def calc_salary():
             print("Please enter a valid salary as a number")       
     
     pay_pm = salary_pre_tax/12
+    print(f"Salary per year: {salary_pre_tax}, slary per month = {pay_pm}")
 
     ## step 2
     
@@ -121,7 +101,7 @@ def calc_salary():
         try:
             pension = input("Enter pension contribution percentage")
             if pension.isnumeric:
-                pension = int(salary_pre_tax)
+                pension = int(pension)
                 valid_pension = True
             else:
                 raise ValueError
@@ -130,6 +110,8 @@ def calc_salary():
             print("Please enter a valid pension as a number")       
     
     pension_deduction_pa = salary_pre_tax * (pension*0.01)
+    pension_deduction_pm = pension_deduction_pa/12
+    print("pension",pension_deduction_pa,pension_deduction_pm)
 
     
     ## step 3 
@@ -137,9 +119,12 @@ def calc_salary():
     if salary_pre_tax > 125000 :
         tax_free_allowence = 0
     else:
-        tax_free_allowence = 125700    
+        tax_free_allowence = 12570    
 
     taxable_income = salary_pre_tax - tax_free_allowence
+    taxable_income_pm = taxable_income/12
+
+    print("taxable income:",taxable_income,tax_free_allowence)
 
     ## step 4 calculate tax 
 
@@ -152,14 +137,15 @@ def calc_salary():
     
     ## step 5
 
-    if (pay_pm > 792 )and (pay_pm <= 4167 ):
-        ni_contributions = 0.12*(pay_pm)
-    elif pay_pm > 4167:
-        ni_contributions = 0.12*4167 + 0.02*(pay_pm-4167)  
+    if (taxable_income_pm > 792 ) and (taxable_income_pm <= 4167 ):
+        ni_contributions = 0.12*(taxable_income_pm)
+    elif taxable_income_pm > 4167:
+        ni_contributions = 0.12*4167 + 0.02*(taxable_income_pm-4167)  
 
     else:
         ni_contributions = 0  
 
+    print("ni contri", ni_contributions)
     ## step 6 
 
     ## validate user input
@@ -190,10 +176,10 @@ def calc_salary():
     else:
         student_loan = 0 
 
-    total_deductions = student_loan + ni_contributions + (tax_rate*taxable_income)/12 + pension_deduction_pa
+    total_deductions = student_loan + ni_contributions + (tax_rate*taxable_income_pm) + pension_deduction_pm
     take_home_pay = pay_pm - total_deductions
 
-    print(take_home_pay) 
+    print("takehome",take_home_pay,"total ded",total_deductions) 
 
 
 
@@ -293,6 +279,8 @@ def get_insights(account:list):
     """
     DOCSRTING
     """
+
+
     
 
 
@@ -374,4 +362,5 @@ def main ():
         launch_interface(user_choice)
 
 
-calc_balance_sheet()
+splash_screen()
+calc_salary()
