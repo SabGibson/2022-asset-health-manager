@@ -28,18 +28,26 @@ insights = SHEET.worksheet("insights")
 
 
 def splash_screen():
+
     """
-    splash_screen() function takes no arguments and prints welcome message and service name for user.
-    'Finacne Health Manager' is printed and held for 2 seconds.
+    splash_screen() -> None 
+    
+    function takes no arguments and prints welcome message and service name for user.
+    'Finance Health Manager' is printed and held for 2 seconds.
     """
+    # tprint() form art lib prints ascii art 
     tprint("Finance Health Manager")
+
+    #Hold splash screen with sleep 
     sleep(2)
 
 def create_usrname():
+
     """
     create_usrname() -> string 
+
     part of new_user_protocol function used to accept user input as name, and validate name is unique in sheet
-    username is to be used as unique ID and forign key to qurey data as a dict
+    username is to be used as unique ID and foreign key to query data as a dict
 
     """
     valid_uname = False
@@ -51,15 +59,19 @@ def create_usrname():
                 raise ValueError
             
             valid_uname = True
+            users.append_row([entrd_ursname])  
             return entrd_ursname
         except ValueError:
-            print("Username taken.")       
+            print("Username taken.")
+
+       
 
         
 def calc_salary():
 
     """
     calc_salary() -> float 
+
     step 1) Get salary in monthly and weekly terms
     step 2) Calculate pension contribution
     step 3) Calculate taxable income
@@ -69,9 +81,9 @@ def calc_salary():
     step 7) Calculate take home pay 
     """
     
+    # validation loop variables
     valid_sal = False
     valid_pension = False
-    tax_free_allowence = 0
     student_loan_inpt_valid = False
 
     ## step 1 
@@ -80,18 +92,20 @@ def calc_salary():
 
     while (valid_sal is False):
         try:
-            salary_pre_tax = input("Please input pre-tax salary per annum")
+            salary_pre_tax = input("Please input pre-tax salary per annum: ")
             if salary_pre_tax.isnumeric:
-                salary_pre_tax = float(salary_pre_tax)
+                salary_pre_tax = round(float(salary_pre_tax))
                 valid_sal = True
             else:
                 raise ValueError
 
         except ValueError:
-            print("Please enter a valid salary as a number")       
+            print("Please enter a valid salary as a number ")       
     
     pay_pm = salary_pre_tax/12
-    print(f"Salary per year: {salary_pre_tax}, slary per month = {pay_pm}")
+    sleep(0.8)
+    print(f"Pre-tax salary per year entered: £{salary_pre_tax}, pre-tax slary per month: £{pay_pm}")
+    sleep(0.4)
 
     ## step 2
     
@@ -99,19 +113,26 @@ def calc_salary():
 
     while (valid_pension is False):
         try:
-            pension = input("Enter pension contribution percentage")
+            pension = input("Enter pension contribution percentage: ")
             if pension.isnumeric:
-                pension = int(pension)
-                valid_pension = True
+                if (0<= int(pension) <= 45):
+                    pension = int(pension)
+                    valid_pension = True
+                else:
+                    raise AttributeError
             else:
                 raise ValueError
 
         except ValueError:
-            print("Please enter a valid pension as a number")       
+            print("Please enter a valid pension as a number")
+
+        except AttributeError:
+            print("Please enter a value between 0 and 45 (extremes included)")       
     
     pension_deduction_pa = salary_pre_tax * (pension*0.01)
     pension_deduction_pm = pension_deduction_pa/12
-    print("pension",pension_deduction_pa,pension_deduction_pm)
+    sleep(1)
+    print(f"Pension contribution is {pension}%; £{pension_deduction_pm} is deducted per month.")
 
     
     ## step 3 
@@ -123,8 +144,9 @@ def calc_salary():
 
     taxable_income = salary_pre_tax - tax_free_allowence
     taxable_income_pm = taxable_income/12
-
-    print("taxable income:",taxable_income,tax_free_allowence)
+    sleep(0.5)
+    print(f"Taxable income with tax-free allowence of 12570 is £{taxable_income_pm} per month")
+    sleep(1)
 
     ## step 4 calculate tax 
 
@@ -145,7 +167,8 @@ def calc_salary():
     else:
         ni_contributions = 0  
 
-    print("ni contri", ni_contributions)
+    print(f"National insurance contributions are £{ni_contributions} per month")
+    sleep(0.5)
     ## step 6 
 
     ## validate user input
@@ -154,15 +177,15 @@ def calc_salary():
         try:
             print("""
 
-            Please select 1 or 2. Or 0.
+            Please select one of the options below 1 ,2 or 0.
                 0)	No student loan
                 1)	Student loan type 1
                 2)	Student loan type 2
 
             """)
-            student_loan_inpt = input("please enter 0,1 or 2")
+            student_loan_inpt = input()
             allowed_inputs = "123"
-            if (student_loan_inpt not in allowed_inputs):
+            if (student_loan_inpt not in allowed_inputs) or (len(student_loan_inpt) > 1):
                 raise ValueError
             student_loan_inpt_valid = True
 
@@ -178,17 +201,20 @@ def calc_salary():
 
     total_deductions = student_loan + ni_contributions + (tax_rate*taxable_income_pm) + pension_deduction_pm
     take_home_pay = pay_pm - total_deductions
+    sleep(1)
+    print(f"Take home pay after deductions is: £{take_home_pay}. Total deductions are: £{total_deductions} ") 
 
-    print("takehome",take_home_pay,"total ded",total_deductions) 
+    return take_home_pay
 
 
+def calc_balance_sheet(usrname):
 
-def calc_balance_sheet():
     """
-    Balance sheet asks the user questions about monthyly expenses.
+    calc_balance_sheet(usrname:str) -> [] 
+
+    Balance sheet asks the user questions about monthly expenses.
     There are 5 fields in total in this section to fill
-    it dosent observe the salaray on a granular level and instead is fluid
-     
+    it doesn’t observe the salary on a granular level and instead is fluid
      """
 
     valid_rent = False
@@ -249,7 +275,7 @@ def calc_balance_sheet():
         except ValueError:
             print("Please enter a valid number")
 
-    print("Please enter your miscillaneous spend: ")
+    print("Please enter your miscellaneous spend: ")
     while (valid_misc is False):
         try:
             usr_misc = input("Enter Value")
@@ -263,25 +289,66 @@ def calc_balance_sheet():
             print("Please enter a valid number")
 
 
-    usr_bills = [usr_rent,usr_utility,usr_ent,usr_shop,usr_misc]
+    usr_bills = [usrname,usr_rent,usr_utility,usr_ent,usr_shop,usr_misc]
 
-    #balance_sheet.append_row(usr_bills)
+    balance_sheet.append_row(usr_bills)
 
-    print(usr_bills)
-
-    return usr_bills
+    return usr_bills[2:]
 
 
 
 
 
-def get_insights(account:list):
+def get_insights(usrname:str,sal:float,account:list):
+
     """
-    DOCSRTING
+    get_insights(usrname:str,sal:float,account:list) -> None
+    observes spend by comparing expesses as percentage of take home pay and delivers insights
     """
+    insight = [usrname]
+    infraction_count = 0
 
+    rent_percent = (account[0]//sal)*100
+    util_percent = (account[1]//sal)*100
+    ent_percent = (account[2]//sal)*100
+    shop_percent = (account[3]//sal)*100
+    misc_percent = (account[4]//sal)*100
+
+    if rent_percent > 35:
+        print(f"You spend {rent_percent}% of your salary on rent! Consider alternatives.")
+        infraction_count +=1
+    insight.append(rent_percent)
 
     
+    if util_percent > 25:
+        print(f"You spend {util_percent}% of your salary on utilities! Too high!.")
+        infraction_count +=1
+    insight.append(util_percent)
+
+    if ent_percent > 5:
+        print(f"You spend {ent_percent}% of your salary on entertainment! Cancell subscriptions.")
+        infraction_count +=1
+    insight.append(ent_percent)
+
+    if shop_percent > 15:
+        print(f"You spend {shop_percent}% of your salary on gorgeries! Consider alternatives.")
+        infraction_count +=1
+    insight.append(shop_percent)
+
+    if misc_percent > 3:
+        print(f"You spend {misc_percent}% of your salary on miscellaneous items! Cut out waste.")
+        infraction_count +=1
+    insight.append(misc_percent)
+
+    if infraction_count > 3:
+        print("Managment strategy needs improvment. URGENT")
+        insight.append("NO")
+    else:
+        print("Balance sheet healthy! Keep it up!")
+        insight.append("Yes")
+    
+    insights.append_row(insight)
+
 
 
 def new_user_protocol():
@@ -291,11 +358,11 @@ def new_user_protocol():
 
     account_user_name = create_usrname()
 
-    calc_salary()
+    usr_sal = calc_salary()
 
-    balance_sheet = calc_balance_sheet()
+    usr_finances = calc_balance_sheet(account_user_name)
 
-    get_insights(balance_sheet)
+    get_insights(account_user_name,usr_sal,usr_finances)
 
 
 
@@ -363,4 +430,4 @@ def main ():
 
 
 splash_screen()
-calc_salary()
+new_user_protocol()
