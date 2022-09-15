@@ -2,13 +2,13 @@
 Import external libraries for working with google drive adn sheets API.
 ...
 """
-from pprint import pprint
+
 import sys
 from tkinter.tix import InputOnly
 import gspread
 from google.oauth2.service_account import Credentials
 from time import sleep
-from art import *
+from art import tprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -26,6 +26,7 @@ salary = SHEET.worksheet("salary")
 balance_sheet = SHEET.worksheet("balance-sheet")
 insights = SHEET.worksheet("insights")
 
+workpages = [users,salary,balance_sheet,insights]
 
 def splash_screen():
 
@@ -54,15 +55,20 @@ def create_usrname():
     all_usrs = users.col_values(1)
     while (valid_uname is False):
         try:
-            entrd_ursname = input("Please enter username")
+            entrd_ursname = input("Please enter username: ")
             if entrd_ursname in all_usrs:
                 raise ValueError
+
+            if len(entrd_ursname)<=2:
+                raise AttributeError
             
             valid_uname = True
             users.append_row([entrd_ursname])  
             return entrd_ursname
         except ValueError:
             print("Username taken.")
+        except AttributeError:
+            print("username too short")
 
        
 
@@ -228,7 +234,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your rent contributions: ")
     while (valid_rent is False):
         try:
-            usr_rent = input("Enter Value")
+            usr_rent = input("Enter Value: ")
             if usr_rent.isnumeric:
                 usr_rent = int(usr_rent)
                 valid_rent = True
@@ -241,7 +247,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your utility bill contributions: ")
     while (valid_util is False):
         try:
-            usr_utility = input("Enter Value")
+            usr_utility = input("Enter Value: ")
             if usr_utility.isnumeric:
                 usr_utility = int(usr_utility)
                 valid_util= True
@@ -254,7 +260,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your entertainment spend: ")
     while (valid_ent is False):
         try:
-            usr_ent = input("Enter Value")
+            usr_ent = input("Enter Value: ")
             if usr_ent.isnumeric:
                 usr_ent = int(usr_ent)
                 valid_ent = True
@@ -280,7 +286,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your miscellaneous spend: ")
     while (valid_misc is False):
         try:
-            usr_misc = input("Enter Value")
+            usr_misc = input("Enter Value: ")
             if usr_misc.isnumeric:
                 usr_misc = int(usr_misc)
                 valid_misc = True
@@ -368,10 +374,104 @@ def new_user_protocol():
     get_insights(account_user_name,usr_sal,usr_finances)
 
 
+def view_existing_usr():
+    
+    """
+    view_existing_user()
+    """
+    valid_uname = False
+    all_usrs = users.col_values(1)
+    while (valid_uname is False):
+        try:
+            entrd_ursname = input("Please enter username to view or 'q' to quit ")
+
+            if entrd_ursname == "q":
+                sys.exit()
+
+            elif entrd_ursname not in all_usrs:
+                raise ValueError
+            
+            
+            
+            valid_uname = True
+            index = users.find(entrd_ursname).row
+
+            sal_data = salary.row_values(index)
+            insights_data = insights.row_values(index)
+            print("Loading profile ...")
+            sleep(3)
+            print(f"Username: {entrd_ursname}\n Take home pay: £{sal_data[1]}\n Student Loan per month: {sal_data[3]} \n Is account in good health?: {insights_data[-1]} {insights_data[1]}% of salaray spent on rent")
+
+        except ValueError:
+            print("User not found.")
+
+
+def del_existing_usr():
+
+    """
+    del_exisiting_usr()
+    """
+
+    valid_uname = False
+    all_usrs = users.col_values(1)
+    while (valid_uname is False):
+        try:
+            entrd_ursname = input("Please enter username to delete or 'q' to quit ")
+            if entrd_ursname == "q":
+                sys.exit()
+
+            elif entrd_ursname not in all_usrs:
+                raise ValueError
+            
+            
+            valid_uname = True
+            print("Deleting account ...")
+            sleep(2)
+            cell = users.find(entrd_ursname)
+
+            for page in workpages:
+                page.delete_rows(cell.row)
+            
+            print("Account deleted and cannot be recovered.")
+
+        except ValueError:
+            print("User not found.")
+    
 
 
 def return_user_protocol():
-    pass
+
+    """
+    retrun_user_protocol() -> None
+    acts as interface for viewing user from sheet or deleting user information
+    """
+    print("Welcome back. Please choose an option below")
+    sleep(1)
+    print("""
+
+    Please select 1 or 2.
+        1)	view Existing User
+        2)	Delete Exisiting User
+        """)
+    sleep(1)
+    is_valid = False
+    while (is_valid is False):
+        try:
+            choice = int(input("Please select 1 or 2. Or type 3 to quit. "))
+            if ((choice == 1)|(choice == 2)|(choice == 3)):
+                is_valid = True
+            raise ValueError
+
+        except ValueError:
+            print("please enter a valid input form the options given.")
+    
+    if choice == 1:
+        view_existing_usr()
+    elif choice == 2:
+        del_existing_usr()
+    else:
+        sys.exit()
+
 
 
 def welcome_screen():
@@ -396,13 +496,14 @@ def welcome_screen():
 
     is_valid = False
 
-    while (is_valid is False):
+    while (is_valid == False):
         try:
-            choice = input("Please select 1 or 2. Or type “q” to quit.")
-            if ((choice != "1")|(choice != "2")|(choice != "q")):
+            choice = int(input("Please select 1 or 2. Or 3 to quit."))
+            if (choice == 1) or (choice ==2) or (choice == 3):
+                is_valid = True
+                return choice
+            else:
                 raise ValueError
-            is_valid = True
-            return choice
 
         except ValueError:
             print("please enter a valid input form the options given.")
@@ -414,7 +515,10 @@ def launch_interface(user_choice):
     It launches corrisponding function for each user experience type 'new' or 'returning'
     output of function is 
     """
-    if user_choice == "1":
+
+    print("launching...")
+    sleep(2)
+    if user_choice == 1:
         new_user_protocol()
     else:
         return_user_protocol()
@@ -424,13 +528,13 @@ def main ():
     splash_screen()
     user_choice = welcome_screen()
 
-    if (user_choice == "q"):
+    if (user_choice == 3):
         print("Thank you! Bye!")
         sleep(3)
         sys.exit()
     else:
         launch_interface(user_choice)
 
+main()
 
-splash_screen()
-new_user_protocol()
+
