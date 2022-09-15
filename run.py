@@ -67,10 +67,10 @@ def create_usrname():
        
 
         
-def calc_salary():
+def calc_salary(usrname):
 
     """
-    calc_salary() -> float 
+    calc_salary(usrname) -> float 
 
     step 1) Get salary in monthly and weekly terms
     step 2) Calculate pension contribution
@@ -202,7 +202,9 @@ def calc_salary():
     total_deductions = student_loan + ni_contributions + (tax_rate*taxable_income_pm) + pension_deduction_pm
     take_home_pay = pay_pm - total_deductions
     sleep(1)
-    print(f"Take home pay after deductions is: £{take_home_pay}. Total deductions are: £{total_deductions} ") 
+    print(f"Take home pay after deductions is: £{take_home_pay}. Total deductions are: £{total_deductions} ")
+
+    salary.append_row([usrname,take_home_pay,pension_deduction_pm,student_loan,ni_contributions]) 
 
     return take_home_pay
 
@@ -293,7 +295,7 @@ def calc_balance_sheet(usrname):
 
     balance_sheet.append_row(usr_bills)
 
-    return usr_bills[2:]
+    return usr_bills[1:]
 
 
 
@@ -307,12 +309,13 @@ def get_insights(usrname:str,sal:float,account:list):
     """
     insight = [usrname]
     infraction_count = 0
+    print(account)
 
-    rent_percent = (account[0]//sal)*100
-    util_percent = (account[1]//sal)*100
-    ent_percent = (account[2]//sal)*100
-    shop_percent = (account[3]//sal)*100
-    misc_percent = (account[4]//sal)*100
+    rent_percent = round((account[0]/sal)*100)
+    util_percent = round((account[1]/sal)*100)
+    ent_percent = round((account[2]/sal)*100)
+    shop_percent = round((account[3]/sal)*100)
+    misc_percent = round((account[4]/sal)*100)
 
     if rent_percent > 35:
         print(f"You spend {rent_percent}% of your salary on rent! Consider alternatives.")
@@ -358,7 +361,7 @@ def new_user_protocol():
 
     account_user_name = create_usrname()
 
-    usr_sal = calc_salary()
+    usr_sal = calc_salary(account_user_name)
 
     usr_finances = calc_balance_sheet(account_user_name)
 
