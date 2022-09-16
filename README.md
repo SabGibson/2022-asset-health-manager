@@ -32,6 +32,19 @@ Happy coding!
 
 ---
 
-Ascii Art (http://patorjk.com/software/taag/)
+# Finance Health Manager
+
+## About
+
+### Background
+
+I decided to create this project as given the ongioing cost of living crisis facing the country. A finance manager felt like the right project to make.
+
+### Purpose
+
+The Finance health manager will enable users to create a user profile and calculate take home pay in additon to reciving insights on where salary is wasted currently and promote positve spending habbits. The terminal application features a salary calculator, insights calculator, allows users to view previous queries and delete unwanted users and all data from persitant sheets storage.
+
+
+
 
 https://www.wikijob.co.uk/finance/pay-salary/calculate-take-home-salary#how-to-calculate-your-take-home-sal

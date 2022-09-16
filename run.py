@@ -5,7 +5,6 @@ Import external libraries for working with google drive adn sheets API.
 
 import sys
 from time import sleep
-from tkinter.tix import InputOnly
 import gspread
 from google.oauth2.service_account import Credentials
 from art import tprint
