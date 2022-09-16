@@ -4,10 +4,10 @@ Import external libraries for working with google drive adn sheets API.
 """
 
 import sys
+from time import sleep
 from tkinter.tix import InputOnly
 import gspread
 from google.oauth2.service_account import Credentials
-from time import sleep
 from art import tprint
 
 SCOPE = [
@@ -55,7 +55,7 @@ def create_usrname():
     all_usrs = users.col_values(1)
     while (valid_uname is False):
         try:
-            entrd_ursname = input("Please enter username: ")
+            entrd_ursname = input("Please enter username:\n")
             if entrd_ursname in all_usrs:
                 raise ValueError
 
@@ -83,22 +83,20 @@ def calc_salary(usrname):
     step 3) Calculate taxable income
     step 4) calculate tax rate
     step 5) Calculate NI contributions
-    step 6) Calculate student loan repayments 
-    step 7) Calculate take home pay 
+    step 6) Calculate student loan repayments
+    step 7) Calculate take home pay
     """
-    
     # validation loop variables
     valid_sal = False
     valid_pension = False
     student_loan_inpt_valid = False
 
-    ## step 1 
-
+    ## step 1
     ## validate user input
 
     while (valid_sal is False):
         try:
-            salary_pre_tax = input("Please input pre-tax salary per annum: ")
+            salary_pre_tax = input("Please input pre-tax salary per annum:\n")
             if salary_pre_tax.isnumeric:
                 salary_pre_tax = round(float(salary_pre_tax))
                 valid_sal = True
@@ -119,7 +117,7 @@ def calc_salary(usrname):
 
     while (valid_pension is False):
         try:
-            pension = input("Enter pension contribution percentage: ")
+            pension = input("Enter pension contribution percentage:\n")
             if pension.isnumeric:
                 if (0<= int(pension) <= 45):
                     pension = int(pension)
@@ -189,7 +187,7 @@ def calc_salary(usrname):
                 2)	Student loan type 2
 
             """)
-            student_loan_inpt = input()
+            student_loan_inpt = input("\n")
             allowed_inputs = "123"
             if (student_loan_inpt not in allowed_inputs) or (len(student_loan_inpt) > 1):
                 raise ValueError
@@ -234,7 +232,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your rent contributions: ")
     while (valid_rent is False):
         try:
-            usr_rent = input("Enter Value: ")
+            usr_rent = input("Enter Value:\n")
             if usr_rent.isnumeric:
                 usr_rent = int(usr_rent)
                 valid_rent = True
@@ -247,7 +245,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your utility bill contributions: ")
     while (valid_util is False):
         try:
-            usr_utility = input("Enter Value: ")
+            usr_utility = input("Enter Value:\n")
             if usr_utility.isnumeric:
                 usr_utility = int(usr_utility)
                 valid_util= True
@@ -260,7 +258,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your entertainment spend: ")
     while (valid_ent is False):
         try:
-            usr_ent = input("Enter Value: ")
+            usr_ent = input("Enter Value:\n")
             if usr_ent.isnumeric:
                 usr_ent = int(usr_ent)
                 valid_ent = True
@@ -273,7 +271,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your grocery spend: ")
     while (valid_shop is False):
         try:
-            usr_shop= input("Enter Value")
+            usr_shop= input("Enter Value\n")
             if usr_shop.isnumeric:
                 usr_shop = int(usr_shop)
                 valid_shop = True
@@ -286,7 +284,7 @@ def calc_balance_sheet(usrname):
     print("Please enter your miscellaneous spend: ")
     while (valid_misc is False):
         try:
-            usr_misc = input("Enter Value: ")
+            usr_misc = input("Enter Value:\n")
             if usr_misc.isnumeric:
                 usr_misc = int(usr_misc)
                 valid_misc = True
@@ -383,7 +381,7 @@ def view_existing_usr():
     all_usrs = users.col_values(1)
     while (valid_uname is False):
         try:
-            entrd_ursname = input("Please enter username to view or 'q' to quit ")
+            entrd_ursname = input("Please enter username to view or 'q' to quit\n")
 
             if entrd_ursname == "q":
                 sys.exit()
@@ -416,7 +414,7 @@ def del_existing_usr():
     all_usrs = users.col_values(1)
     while (valid_uname is False):
         try:
-            entrd_ursname = input("Please enter username to delete or 'q' to quit ")
+            entrd_ursname = input("Please enter username to delete or 'q' to quit\n")
             if entrd_ursname == "q":
                 sys.exit()
 
@@ -457,7 +455,7 @@ def return_user_protocol():
     is_valid = False
     while (is_valid is False):
         try:
-            choice = int(input("Please select 1 or 2. Or type 3 to quit. "))
+            choice = int(input("Please select 1 or 2. Or type 3 to quit.\n"))
             if ((choice == 1)|(choice == 2)|(choice == 3)):
                 is_valid = True
             raise ValueError
@@ -498,7 +496,7 @@ def welcome_screen():
 
     while (is_valid == False):
         try:
-            choice = int(input("Please select 1 or 2. Or 3 to quit."))
+            choice = int(input("Please select 1 or 2. Or 3 to quit.\n"))
             if (choice == 1) or (choice ==2) or (choice == 3):
                 is_valid = True
                 return choice
@@ -536,5 +534,3 @@ def main ():
         launch_interface(user_choice)
 
 main()
-
-
