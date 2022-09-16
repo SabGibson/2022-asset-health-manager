@@ -37,7 +37,7 @@ def splash_screen():
     """
     # tprint() form art lib prints ascii art 
     tprint("FHM")
-    print("Finance Health Manager")
+    print("Finance Health Manager\n")
 
     #Hold splash screen with sleep 
     sleep(2)
@@ -476,7 +476,9 @@ def welcome_screen():
     Valid input required to proceed
     """
 
-    print("Please select 1 or 2. Or type “q” to quit. \n 1)	New User – if you would like to register a new user, and complete finance assessment\n 2)	Returning User – if you would like to view, update or delete an existing profile \n 3)	Quit – to end program")
+    print("Please select 1 or 2. Or type “q” to quit. \n")
+    print("1)	New User – if you would like to register a new user")
+    print("2)	Update or delete an existing profile \n 3)	Quit – to end program")
 
     is_valid = False
 
