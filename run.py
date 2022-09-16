@@ -478,7 +478,7 @@ def welcome_screen():
 
     print("Please select 1 or 2. Or type “q” to quit. \n")
     print("1)	New User – if you would like to register a new user")
-    print("2)	Update or delete an existing profile \n 3)	Quit – to end program")
+    print("2)	Update or delete an existing profile \n3)	Quit – to end program\n")
 
     is_valid = False
 
