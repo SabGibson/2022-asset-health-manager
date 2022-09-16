@@ -36,7 +36,8 @@ def splash_screen():
     'Finance Health Manager' is printed and held for 2 seconds.
     """
     # tprint() form art lib prints ascii art 
-    tprint("Finance Health Manager")
+    tprint("FHM")
+    print("Finance Health Manager")
 
     #Hold splash screen with sleep 
     sleep(2)
@@ -107,7 +108,7 @@ def calc_salary(usrname):
     
     pay_pm = salary_pre_tax/12
     sleep(0.8)
-    print(f"Pre-tax salary per year entered: £{salary_pre_tax}, pre-tax slary per month: £{pay_pm}")
+    print(f"Pre-tax salary per year entered: £{salary_pre_tax}\n pre-tax slary per month: £{pay_pm}")
     sleep(0.4)
 
     ## step 2
@@ -178,14 +179,7 @@ def calc_salary(usrname):
     
     while student_loan_inpt_valid is False:
         try:
-            print("""
-
-            Please select one of the options below 1 ,2 or 0.
-                0)	No student loan
-                1)	Student loan type 1
-                2)	Student loan type 2
-
-            """)
+            print("Please select one of the options below 1 ,2 or 0. \n 0)	No student loan\n1)	Student loan type 1 \n 2) Student loan type 2")
             student_loan_inpt = input("\n")
             allowed_inputs = "123"
             if (student_loan_inpt not in allowed_inputs) or (len(student_loan_inpt) > 1):
@@ -205,7 +199,7 @@ def calc_salary(usrname):
     total_deductions = student_loan + ni_contributions + (tax_rate*taxable_income_pm) + pension_deduction_pm
     take_home_pay = pay_pm - total_deductions
     sleep(1)
-    print(f"Take home pay after deductions is: £{take_home_pay}. Total deductions are: £{total_deductions} ")
+    print(f"Take home pay after deductions is: £{take_home_pay}.\n Total deductions are: £{total_deductions} ")
 
     salary.append_row([usrname,take_home_pay,pension_deduction_pm,student_loan,ni_contributions]) 
 
@@ -482,14 +476,7 @@ def welcome_screen():
     Valid input required to proceed
     """
 
-    print("""
-
-    Please select 1 or 2. Or type “q” to quit.
-        1)	New User – if you would like to register a new user, and complete finance assessment
-        2)	Returning User – if you would like to view, update or delete an existing profile
-        3)	Quit – to end program
-
-        """)
+    print("Please select 1 or 2. Or type “q” to quit. \n 1)	New User – if you would like to register a new user, and complete finance assessment\n 2)	Returning User – if you would like to view, update or delete an existing profile \n 3)	Quit – to end program")
 
     is_valid = False
 
